@@ -163,33 +163,8 @@ module.exports.updateUserProfile = async (requestUser, requestBody) => {
 			throw new UnauthorizedException();
 		}
 
-		let checkProfileImageUploaded = false;
-		let profile_image_id = null;
-
-		if (requestBody.profile_image_format_type) {
-
-			let profile_image_type = requestBody.profile_image_format_type.toLowerCase();
-
-			//check image types is equal to supported formats
-			if (profile_image_type != 'png' && profile_image_type != 'jpg' && profile_image_type != 'jpeg') {
-				throw new BadRequestException('Unsupported image format. Images only in png, jpg or jpeg formats are allowed.');
-			}
-
-			const profile_image_name = requestUser.user_id + '.' + profile_image_type;
-
-			checkProfileImageUploaded = await uploadService.checkUserImageUploaded(profile_image_name);
-
-			if (checkProfileImageUploaded === false) {
-				profile_image_id = null;
-			}
-			else {
-				profile_image_id = profile_image_name;
-			}
-		}
-
 		await User.findByIdAndUpdate(requestUser.user_id, {
 			$set: {
-				image: profile_image_id,
 				first_name: requestBody.first_name,
 				last_name: requestBody.last_name
 			}
@@ -233,6 +208,54 @@ module.exports.updateUserPassword = async (requestUser, requestBody) => {
 
 		return {
 			msg: 'User Password Updated Successfully!'
+		};
+
+	} catch (err) {
+		throw err;
+	}
+};
+
+module.exports.updateUserImage = async (requestUser, requestBody) => {
+	// eslint-disable-next-line no-useless-catch
+	try {
+
+		let userObj = await User.findById(requestUser.user_id);
+		if (!userObj) {
+			throw new UnauthorizedException();
+		}
+
+		let checkProfileImageUploaded = false;
+		let profile_image_id = null;
+
+		if (requestBody.image_format_type) {
+
+			let profile_image_type = requestBody.image_format_type.toLowerCase();
+
+			//check image types is equal to supported formats
+			if (profile_image_type != 'png' && profile_image_type != 'jpg' && profile_image_type != 'jpeg') {
+				throw new BadRequestException('Unsupported image format. Images only in png, jpg or jpeg formats are allowed.');
+			}
+
+			const profile_image_name = requestUser.user_id + '.' + profile_image_type;
+
+			checkProfileImageUploaded = await uploadService.checkUserImageUploaded(profile_image_name);
+
+			if (checkProfileImageUploaded === false) {
+				profile_image_id = null;
+			}
+			else {
+				profile_image_id = profile_image_name;
+			}
+		}
+
+		await User.findByIdAndUpdate(requestUser.user_id, {
+			$set: {
+				image: profile_image_id,
+			}
+		});
+
+		return {
+			msg: 'User Profile Image Successfully!'
 		};
 
 	} catch (err) {

@@ -24,13 +24,17 @@ const authRoutesValidationsSchemas = {
 	updateUserProfile: Joi.object().keys({
 		first_name: Joi.string().regex(/^[^<>=]*$/).required(),
 		last_name: Joi.string().regex(/^[^<>=]*$/).required(),
-		profile_image_format_type: Joi.string().regex(/^[^<>=]*$/).trim().allow(null || '')
 	}),
 
 	//update user password
 	updateUserPassword: Joi.object().keys({
 		current_password: Joi.string().required(),
 		new_password: Joi.string().required(),
+	}),
+
+	//update user image
+	updateUserImage: Joi.object().keys({
+		image_format_type: Joi.string().regex(/^[^<>=]*$/).trim().allow(null || '')
 	}),
 
 };

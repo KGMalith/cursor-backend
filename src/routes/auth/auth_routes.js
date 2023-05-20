@@ -36,5 +36,18 @@ router.post('/update-password',
 	userController.updateUserPassword
 );
 
+//update user passwords
+router.get('/get-user-profile',
+	checkToken,
+	userController.getUserProfile
+);
+
+//update user profile
+router.post('/update-profile-image',
+	checkToken,
+	validationsMiddleware(authRoutesValidationsSchemas.updateUserImage),
+	userController.updateUserImage
+);
+
 
 module.exports = router;

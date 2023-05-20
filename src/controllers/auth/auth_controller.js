@@ -30,7 +30,7 @@ module.exports.getPreSignedUrlToUploadProfileImage = async (req, res) => {
 module.exports.updateUserProfile = async (req, res) => {
 	try {
 		const serviceResponse = await authService.updateUserProfile(req.user, req.body);
-		return res.status(200).json({ success: true, msg: serviceResponse.msg, showMessage: false });
+		return res.status(200).json({ success: true, msg: serviceResponse.msg, showMessage: true });
 	} catch (err) {
 		return res.status(err.status || 500).json({ success: false, msg: err.msg || 'Something went wrong. Try refreshing the page' });
 	}
@@ -39,7 +39,25 @@ module.exports.updateUserProfile = async (req, res) => {
 module.exports.updateUserPassword = async (req, res) => {
 	try {
 		const serviceResponse = await authService.updateUserPassword(req.user, req.body);
-		return res.status(200).json({ success: true, msg: serviceResponse.msg, showMessage: false });
+		return res.status(200).json({ success: true, msg: serviceResponse.msg, showMessage: true });
+	} catch (err) {
+		return res.status(err.status || 500).json({ success: false, msg: err.msg || 'Something went wrong. Try refreshing the page' });
+	}
+};
+
+module.exports.getUserProfile = async (req, res) => {
+	try {
+		const serviceResponse = await authService.getUserProfile(req.user);
+		return res.status(200).json({ success: true, msg: serviceResponse.msg, data:serviceResponse.data, showMessage: false });
+	} catch (err) {
+		return res.status(err.status || 500).json({ success: false, msg: err.msg || 'Something went wrong. Try refreshing the page' });
+	}
+};
+
+module.exports.updateUserImage = async (req, res) => {
+	try {
+		const serviceResponse = await authService.updateUserImage(req.user, req.body);
+		return res.status(200).json({ success: true, msg: serviceResponse.msg, showMessage: true });
 	} catch (err) {
 		return res.status(err.status || 500).json({ success: false, msg: err.msg || 'Something went wrong. Try refreshing the page' });
 	}
