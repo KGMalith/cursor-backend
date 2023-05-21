@@ -215,6 +215,35 @@ module.exports.updateUserPassword = async (requestUser, requestBody) => {
 	}
 };
 
+module.exports.getUserProfile = async (requestUser) => {
+	// eslint-disable-next-line no-useless-catch
+	try {
+		let userObj = await User.findById(requestUser.user_id,'email first_name last_name image').exec();
+		if (!userObj) {
+			throw new UnauthorizedException();
+		}
+
+		if (userObj.image) {
+			imageUrl = await uploadService.getPreSignedurlForViewUserImage(userObj.image);
+
+			if (imageUrl) {
+				userObj.image = imageUrl;
+			}
+			else {
+				userObj.image = null;
+			}
+		}
+
+		return {
+			data:userObj,
+			msg: 'User Profile generated Successfully!'
+		};
+
+	} catch (err) {
+		throw err;
+	}
+};
+
 module.exports.updateUserImage = async (requestUser, requestBody) => {
 	// eslint-disable-next-line no-useless-catch
 	try {
