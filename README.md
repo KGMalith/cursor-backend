@@ -1,7 +1,7 @@
 
 # Cursor App
 
-This is a nodejs backend application with express which is created for realtime cursor activity.
+This is a nodejs backend application with express, created for realtime cursor activity.
 
 
 ## Installation
